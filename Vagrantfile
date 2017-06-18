@@ -15,4 +15,40 @@ Vagrant.configure("2") do |config|
       SHELL
   end
 
+  config.vm.define "web1" do |web1|
+
+    web1.vm.box = "ubuntu/xenial64"
+    web1.vm.network "private_network", ip: "192.168.10.101"
+
+    web1.vm.provision "shell", inline: <<-SHELL
+
+      sudo apt-get update
+      sudo apt-get install -y nginx
+      sudo service nginx stop
+      sudo cp /vagrant/vagrant_files/nginx-web /etc/nginx/sites-enabled/default
+      sudo service nginx start
+      sudo echo "WEB 1" >> /var/www/html/index.html
+
+    SHELL
+
+  end
+
+  config.vm.define "web2" do |web2|
+
+    web2.vm.box = "ubuntu/xenial64"
+    web2.vm.network "private_network", ip: "192.168.10.102"
+
+    web2.vm.provision "shell", inline: <<-SHELL
+
+      sudo apt-get update
+      sudo apt-get install -y nginx
+      sudo service nginx stop
+      sudo cp /vagrant/vagrant_files/nginx-web /etc/nginx/sites-enabled/default
+      sudo service nginx start
+      sudo echo "WEB 2" >> /var/www/html/index.html
+
+    SHELL
+
+  end
+
 end
